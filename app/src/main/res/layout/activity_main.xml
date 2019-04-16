@@ -59,19 +59,10 @@
             android:textSize="24sp" />
 
         <Button
-            android:id="@+id/infoButton"
-            android:layout_width="160dp"
-            android:layout_height="52dp"
-            android:layout_marginTop="40dp"
-            android:onClick="openInfo"
-            android:text="@string/infoButton"
-            android:textSize="24sp" />
-
-        <Button
             android:id="@+id/quitButton"
             android:layout_width="160dp"
             android:layout_height="52dp"
-            android:layout_marginTop="100dp"
+            android:layout_marginTop="200dp"
             android:onClick="closeApp"
             android:text="@string/quitButton"
             android:textSize="24sp" />
