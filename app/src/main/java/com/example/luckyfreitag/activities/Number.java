@@ -7,7 +7,12 @@ import android.app.ActionBar;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.widget.TextView;
@@ -21,6 +26,8 @@ import java.util.ArrayList;
 
 public class Number extends AppCompatActivity implements android.support.v7.app.ActionBar.TabListener {
 
+    private ViewPager mPager;
+    private PagerAdapter pagerAdapter;
     GameFragment gameFragment;
     Randomizer randomizer;
     android.support.v4.app.FragmentTransaction transaction;
@@ -34,6 +41,8 @@ public class Number extends AppCompatActivity implements android.support.v7.app.
     private static final String TAG_TAB = "tabGame";
     private static final String TAG_TAB2 = "tabRandom";
 
+    private static final int NUM_PAGES = 2;
+
     int flag;
     int sumVictory;
     int sumLose;
@@ -44,14 +53,45 @@ public class Number extends AppCompatActivity implements android.support.v7.app.
 //    public static ArrayAdapter<String> adapterSimple;
     public static TextView sumWins;
 
+    /**
+     * A simple pager adapter that represents 5 ScreenSlidePageFragment objects, in
+     * sequence.
+     */
+    private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
+        public ScreenSlidePagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            switch (position) {
+                case 0:
+                    return new GameFragment();
+                case 1:
+                    return new Randomizer();
+                default:
+                    return new GameFragment();
+            }
+        }
+
+        @Override
+        public int getCount() {
+            return NUM_PAGES;
+        }
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_number);
 
-        //ActionBar changes
+        //ViewPager settings
+        mPager = (ViewPager) findViewById(R.id.frgmConteiner);
+        pagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
+        mPager.setAdapter(pagerAdapter);
 
+        //ActionBar changes
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -106,6 +146,18 @@ public class Number extends AppCompatActivity implements android.support.v7.app.
 //                toast.show();
 //            }
 //        });
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (mPager.getCurrentItem() == 0) {
+            // If the user is currently looking at the first step, allow the system to handle the
+            // Back button. This calls finish() on this activity and pops the back stack.
+            super.onBackPressed();
+        } else {
+            // Otherwise, select the previous step.
+            mPager.setCurrentItem(mPager.getCurrentItem() - 1);
+        }
     }
 
     @Override
